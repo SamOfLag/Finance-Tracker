@@ -18,3 +18,12 @@ export interface IFinance extends Document {
     description: string,
     user: mongoose.Schema.Types.ObjectId
 }
+
+export interface IBudget extends Document {
+    userId: mongoose.Schema.Types.ObjectId,
+    category: string,
+    amount: number,
+    month: number,
+    year: number,
+    createdAt?: Date
+}
