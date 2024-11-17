@@ -1,7 +1,11 @@
 import mongoose, {Schema, model} from "mongoose";
 import { IFinance } from "../types/interfaces";
 
-const expenseSchema: Schema<IFinance> = new Schema (
+
+const predefExpenseCategories = [
+    'Food', 'Transport', 'Rent', 'Utilities', 'Entertainment', 'Other'
+]
+const expenseSchema = new Schema<IFinance> (
     {
         amount: {
             type: Number,
@@ -10,7 +14,8 @@ const expenseSchema: Schema<IFinance> = new Schema (
 
         category: {
             type: String,
-            required: true
+            enum: predefExpenseCategories,
+            default: 'Other'
         },
 
         description: {
