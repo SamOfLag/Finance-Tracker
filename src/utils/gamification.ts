@@ -25,7 +25,7 @@ export const updateStreaks = async (userId: string, next: NextFunction) => {
     }
 }
 
-export const checkBudgetAchievements = async (userId: string) => {
+export const checkBudgetAchievements = async (userId: string, next: NextFunction) => {
     try {
         const currentMonth = new Date().getMonth()
         const totalExpenses = await Expense.aggregate([
@@ -37,7 +37,11 @@ export const checkBudgetAchievements = async (userId: string) => {
 
         const budget = await Budget.findOne({userId})
 
-        if (budget && totalExpenses[0].total <= budget.month)
+        if (budget && totalExpenses[0].total <= budget.month) {
+            
+        }
 
+    } catch (error) {
+        next (error)
     }
 }
