@@ -3,6 +3,7 @@ import Expense from '../models/Expense'
 import { error } from 'console'
 import { IAuthRequest } from '../types/interfaces'
 import ErrorResponse from '../utils/errorResponse'
+import { checkBudgetAchievements, updateStreaks } from '../utils/gamification'
 
 
 // Create an expense
@@ -13,6 +14,10 @@ export const createExpense = async (req: IAuthRequest, res: Response, next: Next
 
         const newExpense = new Expense({date, amount, category, description, user: userId})
         await newExpense.save()
+
+        await updateStreaks('userId')
+        await checkBudgetAchievements('userId')
+
         res.status(201).json({message: 'Income created successfuly!', data: newExpense, error: false})
     } catch (error) {
         next (new ErrorResponse('Unable to create expense', 500))

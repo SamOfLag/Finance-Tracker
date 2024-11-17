@@ -3,6 +3,7 @@ import Income from '../models/Income'
 import { error } from 'console'
 import { IAuthRequest } from '../types/interfaces'
 import ErrorResponse from '../utils/errorResponse'
+import { checkBudgetAchievements, updateStreaks } from '../utils/gamification'
 
 // CRUD operations for income
 
@@ -14,6 +15,10 @@ export const createIncome = async (req: IAuthRequest, res: Response, next: NextF
 
         const newIncome = new Income({date, amount, category, description, user: userId})
         await newIncome.save()
+
+        await updateStreaks('userId')
+        await checkBudgetAchievements('userId')
+
         res.status(201).json({message: 'Income created successfuly!', data: newIncome, error: false})
     } catch (error) {
         next (new ErrorResponse('Unable to create income', 500))

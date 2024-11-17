@@ -4,7 +4,7 @@ import { NextFunction } from "express";
 import Achievement from "../models/Achievement";
 import Budget from "../models/Budget";
 
-export const updateStreaks = async (userId: string, next: NextFunction) => {
+export const updateStreaks = async (userId: string) => {
     try {
         const today = new Date().toISOString().split('T')[0]
         const hasLoggedToday = await Income.findOne({userId, createdAt: {$gte: today}}) ||
@@ -21,11 +21,11 @@ export const updateStreaks = async (userId: string, next: NextFunction) => {
             await strickAchievement.save();
         }
     } catch (error) {
-        next (error)
+        console.error('Error updating streaks', error)
     }
 }
 
-export const checkBudgetAchievements = async (userId: string, next: NextFunction) => {
+export const checkBudgetAchievements = async (userId: string) => {
     try {
         const currentMonth = new Date().getMonth()
         const totalExpenses = await Expense.aggregate([
@@ -39,9 +39,18 @@ export const checkBudgetAchievements = async (userId: string, next: NextFunction
 
         if (budget && totalExpenses[0].total <= budget.month) {
             
+        let budgetAchievement = await Achievement.findOne({userId, type: 'budget'})
+        if (!budgetAchievement) {
+            budgetAchievement = new Achievement ({userId, type: 'budget', description: 'Stayed under budget for a month'})
         }
 
+        budgetAchievement.criteriaMet = true;
+        budgetAchievement.dateAwarded = new Date();
+        await budgetAchievement.save();
+        }
+        
+
     } catch (error) {
-        next (error)
+        console.error('Error checking budget achievements', error)
     }
 }
