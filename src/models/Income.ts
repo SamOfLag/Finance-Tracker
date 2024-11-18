@@ -3,7 +3,7 @@ import { IFinance } from "../types/interfaces";
 
 
 const predefIncomeCategories = [
-    'Salary', 'Business', 'Investments', 'Other'
+    'Salary', 'Business', 'Investments', 'Transportation', 'Other'
 ]
 
 const incomeShema = new Schema<IFinance> (

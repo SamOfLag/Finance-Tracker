@@ -13,6 +13,11 @@ export const createIncome = async (req: IAuthRequest, res: Response, next: NextF
         const {date, amount, category, description} = req.body
         const userId = req.userId;
 
+        // const parsedDate = new Date(date); // Convert string to Date object
+        // if (isNaN(parsedDate.getTime())) {
+        // return next (new ErrorResponse('Invalid date format', 500));
+        // }
+
         const newIncome = new Income({date, amount, category, description, user: userId})
         await newIncome.save()
 
@@ -21,7 +26,7 @@ export const createIncome = async (req: IAuthRequest, res: Response, next: NextF
 
         res.status(201).json({message: 'Income created successfuly!', data: newIncome, error: false})
     } catch (error) {
-        next (new ErrorResponse('Unable to create income', 500))
+        next (error)
     }
 }
 

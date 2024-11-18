@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createIncome, getAllIncome, getIncomeById, updateIncome, deleteIncome } from "../controllers/income.controller";
-import authMiddleware from "../middlewares/auth.middleware";
+
 
 const incomeRouter = Router()
 

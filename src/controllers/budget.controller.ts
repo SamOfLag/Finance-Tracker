@@ -63,6 +63,6 @@ export const getBudgets = async (req: IAuthRequest, res: Response, next: NextFun
   
       res.json(budgetsWithRemaining);
     } catch (error) {
-        next (new ErrorResponse('Error fetching budgets', 500))
+        next(error)
     }
   };

@@ -21,10 +21,10 @@ app.use(cors())
 
 // mount routes
 app.use('/api/auth', authRouter)
-app.use('/api/incomes', incomeRouter)
-app.use('/api/notes', authMiddleware, expenseRouter)
-app.use('/api/budgets', budgetRouter)
-app.use('/api/summary', summmaryRouter)
+app.use('/api/incomes', authMiddleware, incomeRouter)
+app.use('/api/expenses', authMiddleware, expenseRouter)
+app.use('/api/budgets', authMiddleware, budgetRouter)
+app.use('/api/summary', authMiddleware, summmaryRouter)
 
 // errorhandler middlewares
 app.use(errorHandler)
