@@ -15,8 +15,8 @@ export const createExpense = async (req: IAuthRequest, res: Response, next: Next
         const newExpense = new Expense({date, amount, category, description, user: userId})
         await newExpense.save()
 
-        await updateStreaks('userId')
-        await checkBudgetAchievements('userId')
+        // await updateStreaks('userId')
+        // await checkBudgetAchievements('userId')
 
         res.status(201).json({message: 'Income created successfuly!', data: newExpense, error: false})
     } catch (error) {

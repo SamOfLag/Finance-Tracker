@@ -27,6 +27,8 @@ const hashpassword = async (password: string) => {
     }
 }
 
+
+
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const {email, password} = req.body;

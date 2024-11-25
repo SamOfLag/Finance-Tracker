@@ -10,6 +10,8 @@ import authMiddleware from "./middlewares/auth.middleware";
 import errorHandler from "./middlewares/errorHandler.middleware";
 import budgetRouter from "./routes/budget.routes";
 import summmaryRouter from "./routes/summary.routes";
+import userRouter from "./routes/user.routes";
+import chartRouter from "./routes/monthlyflow.routes";
 
 dotenv.config()
 // connect db
@@ -25,6 +27,8 @@ app.use('/api/incomes', authMiddleware, incomeRouter)
 app.use('/api/expenses', authMiddleware, expenseRouter)
 app.use('/api/budgets', authMiddleware, budgetRouter)
 app.use('/api/summary', authMiddleware, summmaryRouter)
+app.use('/api/user', authMiddleware, userRouter)
+app.use('/api/chart', authMiddleware, chartRouter)
 
 // errorhandler middlewares
 app.use(errorHandler)
