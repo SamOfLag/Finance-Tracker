@@ -4,23 +4,32 @@ import { error } from 'console'
 import { IAuthRequest } from '../types/interfaces'
 import ErrorResponse from '../utils/errorResponse'
 import { checkBudgetAchievements, updateStreaks } from '../utils/gamification'
+import mongoose from 'mongoose'
 
 
 // Create an expense
 export const createExpense = async (req: IAuthRequest, res: Response, next: NextFunction) => {
     try {
         const {date, amount, category, description} = req.body
-        const userId = req.userId;
+        const userId = req.userId
 
-        const newExpense = new Expense({date, amount, category, description, user: userId})
+        console.log(userId)
+
+
+        if (!userId) {
+            return next(new ErrorResponse("User ID is missing", 400));
+        }        
+
+        const newExpense = new Expense({date, amount, category, description, userId})
         await newExpense.save()
+        console.log(newExpense)
 
         // await updateStreaks('userId')
         // await checkBudgetAchievements('userId')
 
-        res.status(201).json({message: 'Income created successfuly!', data: newExpense, error: false})
+        res.status(201).json({message: 'Expense created successfuly!', data: newExpense, error: false})
     } catch (error) {
-        next (new ErrorResponse('Unable to create expense', 500))
+        next (error)
     }
 }
 
@@ -29,10 +38,10 @@ export const getAllExpenses = async (req: IAuthRequest, res: Response, next: Nex
     try {
         const userId = req.userId;
 
-        const allExpenses = await Expense.find({user: userId})
+        const allExpenses = await Expense.find({userId})
         res.status(200).json({data: allExpenses, error: false})
     } catch (error) {
-        next (new ErrorResponse('Unable to generate expenses', 500))
+        next (error)
     }
 }
 
@@ -42,40 +51,42 @@ export const getExpenseById = async (id: String, req: Request, res: Response, ne
         const {id} = req.params
         const expense = await Expense.findById(id)
         if (!expense) {
-            return next (new ErrorResponse('Income not found', 500))
+            return next (new ErrorResponse('Expense not found', 500))
         }
         res.status(200).json({data: expense, error: false})
     } catch (error) {
-        next (new ErrorResponse('Could not fetch income', 500))
+        next (new ErrorResponse('Could not fetch expense', 500))
     }
 }
 
 // Update an expense
 export const updateExpense = async (req: IAuthRequest, res: Response, next: NextFunction) => {
     try {
+        const userId = req.userId
         const {id} = req.params;
         const {amount, category, description, date} = req.body
-        const updatedExpense = await Expense.findByIdAndUpdate({id, user: req.userId}, {amount, category, description, date}, {new: true})
+        const updatedExpense = await Expense.findByIdAndUpdate({id, userId}, {amount, category, description, date}, {new: true})
         if (!updatedExpense) {
-            return next (new ErrorResponse('Income not found', 500))
+            return next (new ErrorResponse('Expense not found', 500))
         }
         res.status(200).json({message: 'Expense updated successfully', data: updatedExpense, error: false})
     } catch (error) {
-        next (new ErrorResponse('Unable to update income', 500))        
+        next (new ErrorResponse('Unable to update expense', 500))        
     }
 }
 
 // Delete an expense
 export const deleteExpense = async (req: IAuthRequest, res: Response, next: NextFunction) => {
     try {
+        const userId = req.userId
         const {id} = req.params
-        const expense = Expense.findByIdAndDelete({id, user: req.userId})
+        const expense = Expense.findByIdAndDelete({id, userId})
 
         if (!expense) {
-            return next (new ErrorResponse('Income not found', 400))
+            return next (new ErrorResponse('Expense not found', 400))
         }
         res.status(200).json({message: 'Expense deleted successfully!', error: false})
     } catch (error) {
-        next (new ErrorResponse('Unable to delete income', 500))
+        next (new ErrorResponse('Unable to delete expense', 500))
     }
 }

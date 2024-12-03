@@ -3,7 +3,7 @@ import { IAchievement } from "../types/interfaces";
 
 const achievementSchema = new Schema<IAchievement> (
     {
-        user: {
+        userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true

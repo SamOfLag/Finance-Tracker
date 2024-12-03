@@ -29,7 +29,7 @@ const incomeShema = new Schema<IFinance> (
             required: false
         },
 
-        user: {
+        userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true

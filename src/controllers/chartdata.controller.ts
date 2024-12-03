@@ -2,19 +2,21 @@ import { Request, Response, NextFunction } from 'express';
 import { IAuthRequest } from '../types/interfaces';
 import Income from '../models/Income';
 import Expense from '../models/Expense';
+import mongoose from 'mongoose'
 
 export const getMonthlyFlow = async (req: IAuthRequest, res: Response, next: NextFunction) => {
   try {
-    const userId = req.userId;
+    const userId = new mongoose.Types.ObjectId(req.userId);
 
     const incomeData = await Income.aggregate([
       { $match: { userId } },
       { $group: { _id: { month: { $month: "$date" }, year: { $year: "$date" } }, total: { $sum: "$amount" } } },
     ]);
 
+
     const expenseData = await Expense.aggregate([
       { $match: { userId } },
-      { $group: { _id: { month: { $month: "$date" }, year: { $year: "$date" } }, total: { $sum: "$amount" } } },
+      { $group: { _id: { month: { $month: "$createdAt" }, year: { $year: "$createdAt" } }, total: { $sum: "$amount" } } },
     ]);
 
     const combinedData = incomeData.map((income) => {

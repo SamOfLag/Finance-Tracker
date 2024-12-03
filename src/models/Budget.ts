@@ -20,23 +20,18 @@ const budgetSchema: Schema<IBudget> = new Schema (
             required: true
         },
 
-        month: {
-            type: Number,
+        startDate: {
+            type: Date,
             required: true,
-            min: 1,
-            max: 12
         },
 
-        year: {
-            type: Number,
+        endDate: {
+            type: Date,
             required: true
         },
+    },
 
-        createdAt: {
-            type: Date,
-            default: Date.now
-        }
-    }
+    {timestamps: true}
 )
 
 const Budget = mongoose.model<IBudget>('Budget', budgetSchema)

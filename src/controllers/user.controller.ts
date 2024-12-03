@@ -6,7 +6,7 @@ import ErrorResponse from '../utils/errorResponse';
 
 export const getUserProfile = async (req: IAuthRequest, res: Response, next: NextFunction) => {
   try {
-    console.log('User ID from token:', req.userId);
+
     const userId = req.userId;
     if (!userId) {
         return next(new ErrorResponse('User ID not found in request', 400));

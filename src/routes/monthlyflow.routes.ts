@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getMonthlyFlow } from "../controllers/monthlyflow.controller";
+import { getMonthlyFlow } from "../controllers/chartdata.controller";
 
 const chartRouter = Router()
 
